@@ -1,0 +1,16 @@
+{
+  "server": {
+    "options": {
+      "port": 8080,
+      "hostname": "0.0.0.0",
+      "keepalive": "true",
+      "base": {
+        "path": "client",
+        "options": {
+          "index": "index.html",
+          "maxAge": 300000
+        }
+      }
+    }
+  }
+}

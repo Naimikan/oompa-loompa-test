@@ -1,0 +1,47 @@
+.header {
+  background-color: #D8D8D8;
+  white-space: nowrap;
+  z-index: 1050;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  max-height: 64px;
+  line-height: 64px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.header .header-container {
+  max-width: 100%;
+  padding: 0 10%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.header .header-container .logo-oompa-loompa {
+  cursor: pointer;
+}
+
+.page-container {
+  margin-top: 98px;
+}
+
+.oompa-container {
+  cursor: pointer;
+}
+
+.oompa-container .oompa-info {
+  margin: 15px 0;
+}
+
+.search-input, .search-input:focus {
+  padding: 5px;
+  border-radius: 5px;
+  outline: none;
+  -webkit-appearance: none;
+}

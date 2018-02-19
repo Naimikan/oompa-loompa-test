@@ -1,0 +1,25 @@
+{
+  "name": "oompa-loompa-test",
+  "version": "1.0.0",
+  "description": "Oompa Loompa Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Naimikan/oompa-loompa-test.git"
+  },
+  "author": "Guillem Aldeguer Lima <guillem.aldeguer@gmail.com> (https://naimikan.github.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Naimikan/oompa-loompa-test/issues"
+  },
+  "homepage": "https://github.com/Naimikan/oompa-loompa-test#readme",
+  "devDependencies": {
+    "connect-livereload": "^0.6.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "load-grunt-config": "^0.19.2"
+  }
+}
