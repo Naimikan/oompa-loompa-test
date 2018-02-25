@@ -27,6 +27,10 @@
   cursor: pointer;
 }
 
+.header .header-container .title {
+  margin-left: 30px;
+}
+
 .page-container {
   margin-top: 98px;
 }
@@ -40,8 +44,19 @@
 }
 
 .search-input, .search-input:focus {
-  padding: 5px;
-  border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
   outline: none;
   -webkit-appearance: none;
+  border-style: ridge;
+}
+
+.search-input-icon {
+  position: absolute;
+  right: 135px;
+  top: 107px;
+}
+
+.text-container {
+  padding: 50px 0;
 }

@@ -18,19 +18,67 @@ Vue.component('oompa-loompa', {
   template: templateString,
   data: function () {
     return {
-      oompa: {}
+      oompa: {},
+      firstLoad: false
+    }
+  },
+  methods: {
+    checkExpiration: function () {
+      var localStorageInfo = window.localStorage.getItem('oompa')
+
+      if (localStorageInfo) {
+        localStorageInfo = JSON.parse(localStorageInfo)
+
+        var infoTime = localStorageInfo.timestamp
+        var nowTime = new Date().getTime()
+
+        return nowTime - infoTime > 1 * 24 * 60 * 60 * 1000
+      } else {
+        return false
+      }
+    },
+    checkSavedOompa: function () {
+      var localStorageInfo = window.localStorage.getItem('oompa')
+
+      if (localStorageInfo) {
+        localStorageInfo = JSON.parse(localStorageInfo)
+
+        var oompaId = localStorageInfo.id
+
+        return oompaId !== this.$route.params.id
+      } else {
+        return false
+      }
     }
   },
   created: function () {
     var self = this
 
-    axios.get('https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas/' + self.$route.params.id).then(function (response) {
-      if (response.data.gender === 'M') response.data.gender = 'Man'
-      else response.data.gender = 'Woman'
+    if (self.checkExpiration() || !window.localStorage.getItem('oompa') || self.checkSavedOompa()) {
+      axios.get('https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas/' + self.$route.params.id).then(function (response) {
+        if (response.data.gender === 'M') response.data.gender = 'Man'
+        else response.data.gender = 'Woman'
 
-      self.oompa = response.data
-    }).catch(function (error) {
-      console.error(error)
-    })
+        if (!self.firstLoad) {
+          var storageObject = {
+            timestamp: new Date().getTime(),
+            id: self.$route.params.id,
+            value: JSON.stringify(response.data)
+          }
+
+          window.localStorage.setItem('oompa', JSON.stringify(storageObject))
+
+          self.firstLoad = true
+        }
+
+        self.oompa = response.data
+      }).catch(function (error) {
+        console.error(error)
+      })
+    } else {
+      var object = JSON.parse(window.localStorage.getItem('oompa'))
+
+      self.oompa = JSON.parse(object.value)
+    }
   }
 })
