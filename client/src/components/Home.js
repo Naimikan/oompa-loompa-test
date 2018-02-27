@@ -7,7 +7,14 @@ var templateString = '<div class="text-center">' +
     '<h1>Find your Oompa Loompa</h1>' +
     '<h2>There are more than 100k</h2>' +
   '</div>' +
+  '<b-alert :show="dismissCountDown" variant="warning" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">' +
+    '<p>Something went wrong: <b>{{errorMessage}}</b>. Retrying in {{dismissCountDown}} seconds...</p>' +
+    '<b-progress variant="warning" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>' +
+  '</b-alert>' +
   '<div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">' +
+    '<div v-if="oompasFiltered.length === 0">' +
+      '<h2>Oops, there\'s no oompa loompas with these filters.</h2>' +
+    '</div>' +
     '<div v-for="oompa of oompasFiltered" class="col-lg-4 text-left">' +
       '<router-link tag="div" class="oompa-container" :to="\'/\' + oompa.id">' +
         '<img width="100%" :src="oompa.image">' +
@@ -19,7 +26,7 @@ var templateString = '<div class="text-center">' +
       '</router-link>' +
     '</div>' +
   '</div>' +
-  '<infinite-loading @infinite="infiniteHandler"></infinite-loading>' +
+  '<infinite-loading ref="VueInfiniteLoading" @infinite="infiniteHandler"></infinite-loading>' +
 '</div>'
 
 Vue.component('home', {
@@ -30,10 +37,26 @@ Vue.component('home', {
       oompas: [],
       oompasFiltered: [],
       searchQuery: '',
-      firstLoad: false
+      firstLoad: false,
+      errorMessage: '',
+
+      dismissSecs: 5,
+      dismissCountDown: 0
+    }
+  },
+  watch: {
+    dismissCountDown: {
+      handler: function (newDismissCountDown) {
+        if (newDismissCountDown === 0) {
+          this.$refs.VueInfiniteLoading.attemptLoad()
+        }
+      }
     }
   },
   methods: {
+    countDownChanged: function (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
     checkExpiration: function () {
       var localStorageInfo = window.localStorage.getItem('oompas')
 
@@ -118,9 +141,12 @@ Vue.component('home', {
         self.oompas = self.oompasFiltered
 
         self.currentPage += 1
-        $state.loaded();
+        $state.loaded()
       }).catch(function (error) {
         console.error(error)
+
+        self.errorMessage = error.message
+        self.dismissCountDown = self.dismissSecs
       })
     }
   }
